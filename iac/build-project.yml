@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Build project
+Parameters:
+  DeployAccount:
+    Type: String
+    Description: Unique deployment name used to prefix buckets and other components
+  ServiceOwner:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /nswws-dis/service/owner
+  ServiceCode:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /nswws-dis/service/code
+  ServiceName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /nswws-dis/service/name
+  ArtifactBucket:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /nswws-dis/artifact/bucket
+Resources:
+  JavaBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      ServiceRole: !Sub arn:aws:iam::${AWS::AccountId}:role/PipelineAutomationRole
+      Name: !Sub "update-last-acted-build-project"
+      Artifacts:
+        NamespaceType: NONE
+        Packaging: NONE
+        Type: CODEPIPELINE
+      Environment:
+        ComputeType: BUILD_GENERAL1_MEDIUM
+        EnvironmentVariables:
+          - Name: LAMBDA_ARTIFACT_BUCKET
+            Value: !Ref ArtifactBucket
+        Image:  aws/codebuild/standard:4.0
+        Type: LINUX_CONTAINER
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: iac/buildspec.yml
+      Tags:
+        - Key: ServiceCode
+          Value: !Sub ${ServiceCode}
+        - Key: ServiceName
+          Value: !Sub ${ServiceName}
+        - Key: ServiceOwner
+          Value: !Sub ${ServiceOwner}
+      TimeoutInMinutes: 20

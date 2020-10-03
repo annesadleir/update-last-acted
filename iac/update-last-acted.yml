@@ -16,7 +16,7 @@ Resources:
     Properties:
       FunctionName: update-last-acted
       Runtime: java11
-      Handler: uk.co.littlestickyleaves.UpdateLateActedHandler::handleRequest
+      Handler: uk.co.littlestickyleaves.UpdateLastActedLambda::handleRequest
       Timeout: 60
       MemorySize: 1032
       CodeUri: ../target/update-last-acted-1.0.jar
@@ -24,8 +24,12 @@ Resources:
       # See: https://github.com/awslabs/serverless-application-model/blob/master/docs/policy_templates.rst
       # eg:
       Policies:
-       - S3WritePolicy:
-           BucketName: *
+       Statement:
+         - Effect: "Allow"
+           Action:
+             - "s3:*"
+           Resource:
+             - "*"
       Tags:
         ServiceCode: !Ref ServiceCode
         ServiceName: !Ref ServiceName
