@@ -6,16 +6,16 @@ Parameters:
     Description: Unique deployment name used to prefix buckets and other components
   ServiceOwner:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/service/owner
+    Default: /nswws-meteo/service/owner
   ServiceCode:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/service/code
+    Default: /nswws-meteo/service/code
   ServiceName:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/service/name
+    Default: /nswws-meteo/service/name
   ArtifactBucket:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/artifact/bucket
+    Default: /nswws-meteo/artifact/bucket
 Resources:
   JavaBuildProject:
     Type: AWS::CodeBuild::Project
@@ -31,7 +31,7 @@ Resources:
         EnvironmentVariables:
           - Name: LAMBDA_ARTIFACT_BUCKET
             Value: !Ref ArtifactBucket
-        Image:  aws/codebuild/standard:4.0
+        Image: oracle/graalvm-ce:latest
         Type: LINUX_CONTAINER
       Source:
         Type: CODEPIPELINE

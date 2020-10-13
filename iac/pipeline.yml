@@ -14,7 +14,7 @@ Parameters:
   DeployAccount:
     Description: AWS account number to deploy infrastructure to
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/account/dev"
+    Default: "/nswws-meteo/account/dev"
   ServiceOwner:
     Type: AWS::SSM::Parameter::Value<String>
     Default: "/nswws-meteo/service/owner"
@@ -27,10 +27,10 @@ Parameters:
   ArtifactBucket:
     Description: The artifact bucket ssm
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/artifact/bucket"
+    Default: "/nswws-meteo/artifact/bucket"
   KmsKey:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/kms/arn"
+    Default: "/nswws-meteo/kms/arn"
   # ------------------------
 Resources:
   DeployUpdateLastActedPipeline:

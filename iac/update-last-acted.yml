@@ -14,7 +14,7 @@ Resources:
   UpdateLastActed:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: update-last-acted
+      FunctionName: update-last-acted-gvm
       Runtime: java11
       Handler: uk.co.littlestickyleaves.UpdateLastActedLambda::handleRequest
       Timeout: 60
