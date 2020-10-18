@@ -5,6 +5,13 @@ phases:
     commands:
       - echo "Install phase"
 #      - https://medium.com/@migueldoctor/how-to-create-a-custom-docker-image-with-jdk8-maven-and-gradle-ddc90f41cee4
+      - echo "Install the AWS CLI"
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
+      - yum -y install unzip
+      - unzip awscliv2.zip
+      - ./aws/install
+      - aws --version
+      - echo "Install Maven"
       - mkdir -p /usr/share/maven /usr/share/maven/ref
       - curl -fsSL -o /tmp/apache-maven.tar.gz https://mirrors.gethosted.online/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
       - echo "Checking hash"
@@ -17,6 +24,7 @@ phases:
       - export MAVEN_HOME=/usr/share/maven
       - export MAVEN_CONFIG=/.m2
       - export PATH=${PATH}:${MAVEN_HOME}
+
   pre_build:
     commands:
       - java -version
