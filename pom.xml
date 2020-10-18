@@ -24,8 +24,14 @@
         </dependencies>
     </dependencyManagement>
 
-
     <dependencies>
+        <!-- AWS Lambda Interface implementation -->
+        <dependency>
+            <groupId>uk.co.littlestickyleaves</groupId>
+            <artifactId>rjr-aws-lambda-base</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>

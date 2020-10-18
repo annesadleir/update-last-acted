@@ -12,7 +12,6 @@ import java.time.ZonedDateTime;
 // TODO fill in Javadoc
 public class TimeHandler {
 
-
     public String examine(BucketLastActed input) {
         String time = input.getTime();
 
