@@ -6,6 +6,7 @@ phases:
       java: corretto11
   pre_build:
     commands:
+      - java -version
       - mvn -v
   build:
     commands:
