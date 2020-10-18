@@ -17,13 +17,13 @@ Parameters:
     Default: "/nswws-dis/account/dev"
   ServiceOwner:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-meteo/service/owner"
+    Default: "/nswws-dis/service/owner"
   ServiceCode:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-meteo/service/code"
+    Default: "/nswws-dis/service/code"
   ServiceName:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-meteo/service/name"
+    Default: "/nswws-dis/service/name"
   ArtifactBucket:
     Description: The artifact bucket ssm
     Type: AWS::SSM::Parameter::Value<String>
