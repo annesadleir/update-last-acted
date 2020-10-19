@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jr.ob.JSON;
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.core.SdkSystemSetting;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -13,6 +14,9 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import uk.co.littlestickyleaves.aws.lambda.base.LambdaWorker;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -20,7 +24,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class UpdateLastActedLambda implements LambdaWorker {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final JSON json = JSON.std;
 
     private static final String LAST_ACTED = "lastActed.txt";
 
@@ -29,12 +33,12 @@ public class UpdateLastActedLambda implements LambdaWorker {
     private static S3Client s3Client = null;
 
     @Override
-    public String handleRaw(String rawString) {
+    public String handleRaw(String rawInput) {
         try {
-            BucketLastActed bucketLastActed = OBJECT_MAPPER.readValue(rawString, BucketLastActed.class);
+            BucketLastActed bucketLastActed = json.beanFrom(BucketLastActed.class, rawInput);
             return handle(bucketLastActed);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 

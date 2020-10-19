@@ -1,4 +1,4 @@
 {
-  "resources":[],
+  "resources":[{"pattern":"\\Qsoftware/amazon/awssdk/services/s3/execution.interceptors\\E"}],
   "bundles":[]
 }
