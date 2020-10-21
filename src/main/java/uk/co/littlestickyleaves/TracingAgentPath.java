@@ -11,11 +11,13 @@ public class TracingAgentPath {
 
     public static void main(String[] args) throws Exception {
         UpdateLastActedLambda updateLastActedLambda = new UpdateLastActedLambda();
-
-        System.out.println(updateLastActedLambda.handleRaw("{\"bucket\":\"papirtape\"}"));
+        String basic = "{\"bucket\":\"papirtape\"}";
+        System.out.println(basic);
+        String basicOut = updateLastActedLambda.handleRaw(basic);
+        System.out.println(basicOut);
         System.out.println(updateLastActedLambda.handleRaw("{\"bucket\":\"papirtape\"," +
                 "\"time\":\"now\"}"));
         System.out.println(updateLastActedLambda.handleRaw("{\"bucket\":\"papirtape\"," +
-                "\"time\":\"2020-10-18T20:51:00.000\"}"));
+                "\"time\":\"2020-10-18T20:51:00Z\"}"));
     }
 }

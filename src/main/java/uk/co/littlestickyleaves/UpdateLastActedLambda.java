@@ -2,6 +2,9 @@ package uk.co.littlestickyleaves;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jr.ob.JSON;
 import com.fasterxml.jackson.jr.ob.JSON;
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.core.SdkSystemSetting;
@@ -22,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class UpdateLastActedLambda implements LambdaWorker {
 
-    private final JSON json = JSON.std;
+    private static final JSON json = JSON.std;
 
     private static final String LAST_ACTED = "lastActed.txt";
 
@@ -31,9 +34,9 @@ public class UpdateLastActedLambda implements LambdaWorker {
     private static S3Client s3Client = null;
 
     @Override
-    public String handleRaw(String rawString) {
+    public String handleRaw(String rawInput) {
         try {
-            BucketLastActed bucketLastActed = json.beanFrom(BucketLastActed.class, rawString);
+            BucketLastActed bucketLastActed = json.beanFrom(BucketLastActed.class, rawInput);
             return handle(bucketLastActed);
         } catch (IOException e) {
             throw new UncheckedIOException(e);

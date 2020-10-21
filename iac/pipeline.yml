@@ -59,9 +59,9 @@ Resources:
                 PollForSourceChanges: false
                 Branch: master
                 OAuthToken: '{{resolve:secretsmanager:/github/token:SecretString:mo-rjr}}'
-              Name: aws-lambda-base-src
+              Name: lambda_base_src
               OutputArtifacts:
-                - Name: aws-lambda-base-src
+                - Name: lambda_base_src
               RunOrder: 1
             - ActionTypeId:
                 Category: Source
@@ -74,9 +74,9 @@ Resources:
                 PollForSourceChanges: !Sub ${AutoSource}
                 Branch: !Sub ${GitBranch}
                 OAuthToken: '{{resolve:secretsmanager:/github/token:SecretString:mo-rjr}}'
-              Name: update-last-acted-src
+              Name: update_last_acted_src
               OutputArtifacts:
-                - Name: update-last-acted-src
+                - Name: update_last_acted_src
               RunOrder: 1
         # ----------------------------------------------------------------------------------------------------------------------------
         - Name: Build
@@ -89,13 +89,14 @@ Resources:
                 Provider: CloudFormation
                 Version: '1'
               InputArtifacts:
-                - Name: update-last-acted-src
+                - Name: update_last_acted_src
+                - Name: lambda_base_src
               Configuration:
                 ActionMode: REPLACE_ON_FAILURE
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/PipelineAutomationRole
                 StackName: "update-last-acted-build-project"
-                TemplatePath: update-last-acted-src::iac/build-project.yml
+                TemplatePath: update_last_acted_src::iac/build-project.yml
                 ParameterOverrides: !Sub |
                   {
                     "DeployAccount": "${DeployAccount}"
@@ -108,13 +109,13 @@ Resources:
                 Version: "1"
                 Provider: CodeBuild
               InputArtifacts:
-                - Name: aws-lambda-base-src
-                - Name: update-last-acted-src
+                - Name: lambda_base_src
+                - Name: update_last_acted_src
               OutputArtifacts:
-                - Name: source-built
+                - Name: source_built
               Configuration:
                 ProjectName: "update-last-acted-build-project"
-                PrimarySource: update-last-acted-src
+                PrimarySource: update_last_acted_src
 
         # ----------------------------------------------------------------------------------------------------------------------------
         - Name: Deploy
@@ -128,7 +129,7 @@ Resources:
                 Version: "1"
                 Provider: CloudFormation
               InputArtifacts:
-                - Name: source-built
+                - Name: source_built
               RoleArn: !Sub arn:aws:iam::${DeployAccount}:role/PipelineAutomationRole
               Configuration:
                 ChangeSetName: "update-last-acted-change-set"
@@ -136,7 +137,7 @@ Resources:
                 ActionMode: CHANGE_SET_REPLACE
                 RoleArn: !Sub arn:aws:iam::${DeployAccount}:role/PipelineAutomationRole
                 Capabilities: CAPABILITY_NAMED_IAM
-                TemplatePath: source-built::update-last-acted.cf.yml
+                TemplatePath: source_built::update-last-acted.cf.yml
                 ParameterOverrides: !Sub |
                   {
                     "ServiceOwner": "${ServiceOwner}",

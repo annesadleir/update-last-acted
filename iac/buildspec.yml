@@ -31,9 +31,11 @@ phases:
       - mvn -v
   build:
     commands:
-      - cd "${CODEBUILD_SRC_DIR_aws-lambda-base-src}"
+      - ls
+      - cd "${CODEBUILD_SRC_DIR_lambda_base_src}"
+      - ls
       - mvn --batch-mode install
-      - cd "${CODEBUILD_SRC_DIR}/java"
+      - cd "${CODEBUILD_SRC_DIR}"
       - mvn --batch-mode install
       - aws cloudformation package --template-file  "iac/update-last-acted.yml" --s3-bucket "${LAMBDA_ARTIFACT_BUCKET}" --output-template-file "${CODEBUILD_SRC_DIR}/update-last-acted.cf.yml"
 artifacts:

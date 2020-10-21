@@ -21,7 +21,7 @@ Resources:
     Type: AWS::CodeBuild::Project
     Properties:
       ServiceRole: !Sub arn:aws:iam::${AWS::AccountId}:role/PipelineAutomationRole
-      Name: !Sub "update-last-acted-build-project"
+      Name: "update-last-acted-build-project"
       Artifacts:
         NamespaceType: NONE
         Packaging: NONE
