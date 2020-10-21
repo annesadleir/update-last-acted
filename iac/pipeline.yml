@@ -55,13 +55,28 @@ Resources:
                 Version: 1
               Configuration:
                 Owner: annesadleir
+                Repo: rjr-aws-lambda-base
+                PollForSourceChanges: false
+                Branch: master
+                OAuthToken: '{{resolve:secretsmanager:/github/token:SecretString:mo-rjr}}'
+              Name: aws-lambda-base-src
+              OutputArtifacts:
+                - Name: aws-lambda-base-src
+              RunOrder: 1
+            - ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              Configuration:
+                Owner: annesadleir
                 Repo: update-last-acted
                 PollForSourceChanges: !Sub ${AutoSource}
                 Branch: !Sub ${GitBranch}
                 OAuthToken: '{{resolve:secretsmanager:/github/token:SecretString:mo-rjr}}'
-              Name: source-code
+              Name: update-last-acted-src
               OutputArtifacts:
-                - Name: source-code
+                - Name: update-last-acted-src
               RunOrder: 1
         # ----------------------------------------------------------------------------------------------------------------------------
         - Name: Build
@@ -74,13 +89,13 @@ Resources:
                 Provider: CloudFormation
                 Version: '1'
               InputArtifacts:
-                - Name: source-code
+                - Name: update-last-acted-src
               Configuration:
                 ActionMode: REPLACE_ON_FAILURE
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/PipelineAutomationRole
                 StackName: "update-last-acted-build-project"
-                TemplatePath: source-code::iac/build-project.yml
+                TemplatePath: update-last-acted-src::iac/build-project.yml
                 ParameterOverrides: !Sub |
                   {
                     "DeployAccount": "${DeployAccount}"
@@ -93,12 +108,13 @@ Resources:
                 Version: "1"
                 Provider: CodeBuild
               InputArtifacts:
-                - Name: source-code
+                - Name: aws-lambda-base-src
+                - Name: update-last-acted-src
               OutputArtifacts:
                 - Name: source-built
               Configuration:
                 ProjectName: "update-last-acted-build-project"
-                PrimarySource: source-code
+                PrimarySource: update-last-acted-src
 
         # ----------------------------------------------------------------------------------------------------------------------------
         - Name: Deploy
