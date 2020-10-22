@@ -137,7 +137,7 @@ Resources:
                 ActionMode: CHANGE_SET_REPLACE
                 RoleArn: !Sub arn:aws:iam::${DeployAccount}:role/PipelineAutomationRole
                 Capabilities: CAPABILITY_NAMED_IAM
-                TemplatePath: source_built::update-last-acted.cf.yml
+                TemplatePath: source_built::update-last-acted-graal.cf.yml
                 ParameterOverrides: !Sub |
                   {
                     "ServiceOwner": "${ServiceOwner}",

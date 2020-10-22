@@ -4,26 +4,30 @@ phases:
   install:
     commands:
       - echo "Install phase"
+      - echo "Need zip and unzip"
+      - yum -y install unzip
+      - yum -y install zip
 #      - https://medium.com/@migueldoctor/how-to-create-a-custom-docker-image-with-jdk8-maven-and-gradle-ddc90f41cee4
       - echo "Install the AWS CLI"
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
-      - yum -y install unzip
       - unzip awscliv2.zip
       - ./aws/install
       - aws --version
       - echo "Install Maven"
       - mkdir -p /usr/share/maven /usr/share/maven/ref
       - curl -fsSL -o /tmp/apache-maven.tar.gz https://mirrors.gethosted.online/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-      - echo "Checking hash"
+      - echo "--Checking hash"
       - echo "c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0 /tmp/apache-maven.tar.gz" | sha512sum -c -
-      - echo "Unzipping maven"
+      - echo "--Unzipping maven"
       - tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1
-      - echo "Cleaning and setting links"
+      - echo "--Cleaning and setting links"
       - rm -f /tmp/apache-maven.tar.gz
       - ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
       - export MAVEN_HOME=/usr/share/maven
       - export MAVEN_CONFIG=/.m2
       - export PATH=${PATH}:${MAVEN_HOME}
+      - echo "Install graal native-image tool"
+      - gu install native-image
 
   pre_build:
     commands:
@@ -31,13 +35,15 @@ phases:
       - mvn -v
   build:
     commands:
-      - ls
       - cd "${CODEBUILD_SRC_DIR_lambda_base_src}"
-      - ls
       - mvn --batch-mode install
       - cd "${CODEBUILD_SRC_DIR}"
       - mvn --batch-mode install
-      - aws cloudformation package --template-file  "iac/update-last-acted.yml" --s3-bucket "${LAMBDA_ARTIFACT_BUCKET}" --output-template-file "${CODEBUILD_SRC_DIR}/update-last-acted.cf.yml"
+      - native-image --enable-url-protocols=http -cp ./target/update-last-acted-1.0.jar -Djava.net.preferIPv4Stack=true -H:Name=update-last-acted -H:Class=uk.co.littlestickyleaves.LambdaRunnerMain --allow-incomplete-classpath --report-unsupported-elements-at-runtime
+      - chmod 777 bootstrap
+      - chmod 777 update-last-acted
+      - zip update-last-acted.zip bootstrap update-last-acted libsunec.so cacerts
+      - aws cloudformation package --template-file  "iac/update-last-acted-graal.yml" --s3-bucket "${LAMBDA_ARTIFACT_BUCKET}" --output-template-file "${CODEBUILD_SRC_DIR}/update-last-acted-graal.cf.yml"
 artifacts:
   files:
-    - update-last-acted.cf.yml
+    - update-last-acted-graal.cf.yml
