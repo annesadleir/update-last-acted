@@ -39,13 +39,12 @@ phases:
       - mvn --batch-mode install
       - cd "${CODEBUILD_SRC_DIR}"
       - mvn --batch-mode install
-      - native-image --enable-url-protocols=http -cp ./target/update-last-acted-1.0.jar -Djava.net.preferIPv4Stack=true -H:Name=update-last-acted -H:Class=uk.co.littlestickyleaves.LambdaRunnerMain --allow-incomplete-classpath --report-unsupported-elements-at-runtime
+      - native-image --enable-url-protocols=http,https -cp ./target/update-last-acted-1.0.jar -Djava.net.preferIPv4Stack=true -H:Name=update-last-acted -H:Class=uk.co.littlestickyleaves.LambdaRunnerMain --allow-incomplete-classpath --report-unsupported-elements-at-runtime
       - chmod 777 bootstrap
       - chmod 777 update-last-acted
-      - chmod 644 $(find . -type f)
-      - chmod 755 $(find . -type d)
       - zip update-last-acted.zip bootstrap update-last-acted libsunec.so cacerts
-      - chmod 644 $(find . -type f)
+      - chmod 777 update-last-acted.zip
+      - ls -l
       - aws cloudformation package --template-file  "iac/update-last-acted-graal.yml" --s3-bucket "${LAMBDA_ARTIFACT_BUCKET}" --output-template-file "${CODEBUILD_SRC_DIR}/update-last-acted-graal.cf.yml"
 artifacts:
   files:
