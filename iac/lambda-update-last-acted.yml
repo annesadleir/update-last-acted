@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Declares resources for this lambda
+Parameters:
+  ServiceCode:
+    Type: String
+  ServiceName:
+    Type: String
+  ServiceOwner:
+    Type: String
+Resources:
+  UpdateLastActed:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: update-last-acted
+      Runtime: provided.al2
+      Handler: bootstrap.is.real.handler
+      Timeout: 60
+      MemorySize: 1032

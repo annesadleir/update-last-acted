@@ -14,9 +14,11 @@ Resources:
   UpdateLastActed:
     Type: AWS::Serverless::Function
     Properties:
+#      Code:
+#        ZipFile: update-last-acted.zip
       FunctionName: update-last-acted
-      Runtime: provided
-      Handler: uk.co.littlestickyleaves.UpdateLastActedLambda::handleRequest
+      Runtime: provided.al2
+      Handler: bootstrap.is.real.handler
       Timeout: 60
       MemorySize: 1032
       CodeUri: ../update-last-acted.zip
