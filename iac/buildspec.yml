@@ -7,7 +7,6 @@ phases:
       - echo "Need zip and unzip"
       - yum -y install unzip
       - yum -y install zip
-#      - https://medium.com/@migueldoctor/how-to-create-a-custom-docker-image-with-jdk8-maven-and-gradle-ddc90f41cee4
       - echo "Install the AWS CLI"
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
       - unzip awscliv2.zip
