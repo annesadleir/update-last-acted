@@ -6,16 +6,16 @@ Parameters:
     Description: Unique deployment name used to prefix buckets and other components
   ServiceOwner:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/service/owner
+    Default: /nswws-dissemination/service/owner
   ServiceCode:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/service/code
+    Default: /nswws-dissemination/service/code
   ServiceName:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/service/name
+    Default: /nswws-dissemination/service/name
   ArtifactBucket:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /nswws-dis/artifact/bucket
+    Default: /nswws-dissemination/artifact/bucket
 Resources:
   JavaBuildProject:
     Type: AWS::CodeBuild::Project
