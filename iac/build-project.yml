@@ -31,7 +31,7 @@ Resources:
         EnvironmentVariables:
           - Name: LAMBDA_ARTIFACT_BUCKET
             Value: !Ref ArtifactBucket
-        Image: oracle/graalvm-ce:20.2.0-java11
+        Image: ghcr.io/graalvm/graalvm-ce:java11-21.0.0.2
         Type: LINUX_CONTAINER
       Source:
         Type: CODEPIPELINE
