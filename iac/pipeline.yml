@@ -14,23 +14,23 @@ Parameters:
   DeployAccount:
     Description: AWS account number to deploy infrastructure to
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/account/dev"
+    Default: "/nswws-dissemination/account/dev"
   ServiceOwner:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/service/owner"
+    Default: "/nswws-dissemination/service/owner"
   ServiceCode:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/service/code"
+    Default: "/nswws-dissemination/service/code"
   ServiceName:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/service/name"
+    Default: "/nswws-dissemination/service/name"
   ArtifactBucket:
     Description: The artifact bucket ssm
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/artifact/bucket"
+    Default: "/nswws-dissemination/artifact/bucket"
   KmsKey:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "/nswws-dis/kms/arn"
+    Default: "/nswws-dissemination/kms/arn"
   # ------------------------
 Resources:
   DeployUpdateLastActedPipeline:
@@ -120,7 +120,6 @@ Resources:
         # ----------------------------------------------------------------------------------------------------------------------------
         - Name: Deploy
           Actions:
-            # Atom watcher
             - Name: UpdateLastActedChangeSet
               RunOrder: 10
               ActionTypeId:
