@@ -144,7 +144,7 @@ Resources:
                     "ServiceName": "${ServiceName}"
                   }
 
-            - Name: DeployAtomWatcherChangeSet
+            - Name: DeployUpdateLastActedChangeSet
               RunOrder: 20
               RoleArn: !Sub arn:aws:iam::${DeployAccount}:role/PipelineAutomationRole
               ActionTypeId:
