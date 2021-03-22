@@ -5,8 +5,8 @@ phases:
     commands:
       - echo "Install phase"
       - echo "Need zip and unzip"
-      - yum -y install unzip
-      - yum -y install zip
+      - microdnf -y install unzip
+      - microdnf -y install zip
       - echo "Install the AWS CLI"
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
       - unzip awscliv2.zip
